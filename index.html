@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Application Development Steps</title>
+
+    <!-- Load Google Charts library -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Google Chart - Pie Chart (Explains Step 1)
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+              ['Step', 'Percentage of Effort'],
+              ['Data Loading', 10],
+              ['Data Cleaning', 15],
+              ['Data Selection & Reduction', 20],
+              ['Data Mining', 25],
+              ['Pattern Evaluation', 15],
+              ['Prediction', 15]
+            ]);
+
+            var options = {
+              title: 'Effort Distribution for Cognitive Application Development',
+              pieHole: 0.4,
+              colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6']
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <!-- Load D3.js library -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- Styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #chart-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        #piechart, #barchart {
+            width: 500px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cognitive Application Development Process</h1>
+
+    <h2>Step 1: Effort Distribution (Google Pie Chart)</h2>
+    <div id="piechart"></div>
+
+    <h2>Step 2: Data Distribution by Feature (D3.js Bar Chart)</h2>
+    <div id="barchart"></div>
+
+    <script>
+        // D3.js Bar Chart - Represents distribution of a dataset by feature
+        const dataset = [10, 15, 20, 25, 15, 15];  // Sample data
+        const steps = ['Data Loading', 'Data Cleaning', 'Selection', 'Mining', 'Evaluation', 'Prediction'];
+
+        // Set dimensions for D3.js bar chart
+        const margin = {top: 20, right: 30, bottom: 40, left: 40},
+              width = 500 - margin.left - margin.right,
+              height = 400 - margin.top - margin.bottom;
+
+        const svg = d3.select("#barchart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // Set x and y scales
+        const x = d3.scaleBand()
+            .domain(steps)
+            .range([0, width])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(dataset)])
+            .nice()
+            .range([height, 0]);
+
+        // Draw bars
+        svg.selectAll(".bar")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", (d, i) => x(steps[i]))
+            .attr("y", d => y(d))
+            .attr("width", x.bandwidth())
+            .attr("height", d => height - y(d))
+            .attr("fill", "#69b3a2");
+
+        // Add x-axis
+        svg.append("g")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        // Add y-axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+    </script>
+
+</body>
+</html>
